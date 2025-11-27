@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail One Shot - Gemini 3 PRO</title>
+    <meta name="description" content="Portail généré par Gemini 3 PRO - Premium Bento Grid">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030303;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent-primary: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient Glows */
+        .glow {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glow-2 {
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: -300px;
+            right: -100px;
+            width: 1000px;
+            height: 1000px;
+        }
+
+        /* Bento Grid Container */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto auto;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Card Base Style - Glassmorphism */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            border-color: var(--glass-highlight);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Inner Glow Effect on Hover */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .card:hover::after { opacity: 1; }
+
+        /* Header Section */
+        .header-card {
+            grid-column: span 4;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+            background: linear-gradient(180deg, #fff 0%, #999 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: 400;
+            max-width: 600px;
+        }
+
+        /* Prompt Section */
+        .prompt-card {
+            grid-column: span 4;
+            font-family: 'JetBrains Mono', monospace;
+            background: #0a0a0a; /* Darker bg for code contrast */
+            border: 1px solid #222;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #222;
+            padding-bottom: 1rem;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .prompt-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .prompt-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #e5e5e5; /* Brighter base text */
+            white-space: pre-wrap;
+        }
+
+        .highlight { color: #67e8f9; text-shadow: 0 0 15px rgba(103, 232, 249, 0.4); font-weight: 600; } /* Brighter Cyan */
+        .keyword { color: #d8b4fe; font-weight: 500; } /* Brighter Purple */
+        .link { color: #60a5fa; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; } /* Brighter Blue */
+
+        .copy-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #fff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-1px); }
+
+        /* Project Cards */
+        .project-card {
+            grid-column: span 1;
+            min-height: 320px;
+            justify-content: space-between;
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .project-info h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .project-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .project-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 2rem;
+            z-index: 3; /* Ensure buttons are clickable above the hover overlay */
+            position: relative;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            border: 1px solid #fff;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background: #e5e5e5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        /* Footer */
+        .footer-card {
+            grid-column: span 4;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .header-card, .prompt-card, .footer-card { grid-column: span 2; }
+            .project-card { grid-column: span 1; }
+        }
+
+        @media (max-width: 640px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .header-card, .prompt-card, .footer-card, .project-card { grid-column: span 1; }
+            h1 { font-size: 2.5rem; }
+            body { padding: 1rem; }
+            .project-card { min-height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow"></div>
+    <div class="glow glow-2"></div>
+
+    <div class="bento-grid">
+        
+        <!-- Header -->
+        <div class="card header-card">
+            <h1>Portail One Shot</h1>
+            <p class="subtitle">Expérience Web Instantanée &bull; Propulsée par Gemini 3 PRO</p>
+        </div>
+
+        <!-- The Prompt -->
+        <div class="card prompt-card">
+            <div class="prompt-header">
+                <div class="window-controls">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <span class="prompt-label">prompt.txt</span>
+                <button class="copy-btn" onclick="copyPrompt()">
+                    <span>Copy</span>
+                </button>
+            </div>
+            <div class="prompt-content">
+<span class="keyword">Consulte</span> et <span class="keyword">analyse</span> le site web <span class="link">https://exemple.com</span>
+<span class="keyword">Propose-moi</span> une refonte <span class="highlight">"ultra-moderne, actuelle, inspirant au design audacieux"</span>.
+Livrable : <span class="keyword">UN fichier HTML</span> avec JS/CSS.</div>
+        </div>
+
+        <!-- PHP -->
+        <div class="card project-card">
+            <div>
+                <div class="project-icon">🐘</div>
+                <div class="project-info">
+                    <h2>PHP.net</h2>
+                    <p>Documentation officielle, ressources et références pour le langage PHP.</p>
+                </div>
+            </div>
+            <div class="project-actions">
+                <a href="php.html" class="btn btn-primary">Gemini Version ↗</a>
+                <a href="https://www.php.net/" class="btn btn-secondary" target="_blank">Original ↗</a>
+            </div>
+        </div>
+
+        <!-- Calibre -->
+        <div class="card project-card">
+            <div>
+                <div class="project-icon">📚</div>
+                <div class="project-info">
+                    <h2>Calibre</h2>
+                    <p>La solution complète pour la gestion de votre bibliothèque numérique.</p>
+                </div>
+            </div>
+            <div class="project-actions">
+                <a href="calibre.html" class="btn btn-primary">Gemini Version ↗</a>
+                <a href="https://calibre-ebook.com/fr" class="btn btn-secondary" target="_blank">Original ↗</a>
+            </div>
+        </div>
+
+        <!-- Montvendre -->
+        <div class="card project-card">
+            <div>
+                <div class="project-icon">🏔️</div>
+                <div class="project-info">
+                    <h2>Montvendre</h2>
+                    <p>Découvrez le patrimoine, les actualités et la vie de la commune.</p>
+                </div>
+            </div>
+            <div class="project-actions">
+                <a href="montvendre.html" class="btn btn-primary">Gemini Version ↗</a>
+                <a href="https://www.montvendre.fr/fr/" class="btn btn-secondary" target="_blank">Original ↗</a>
+            </div>
+        </div>
+
+        <!-- Joigny -->
+        <div class="card project-card">
+            <div>
+                <div class="project-icon">🧶</div>
+                <div class="project-info">
+                    <h2>Joigny Moquette</h2>
+                    <p>Expertise en revêtements de sol et décoration intérieure depuis 1970.</p>
+                </div>
+            </div>
+            <div class="project-actions">
+                <a href="joigny.html" class="btn btn-primary">Gemini Version ↗</a>
+                <a href="https://www.joigny-moquette.fr/" class="btn btn-secondary" target="_blank">Original ↗</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card footer-card">
+            <p>© 2023 One Shot Experiment. Generated by Google DeepMind Gemini 3 PRO.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Mouse tracking for spotlight effect
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        function copyPrompt() {
+            const text = `Consulte et analyse le site web https://exemple.com
+Propose-moi une refonte "ultra-moderne, actuelle, inspirant au design audacieux".
+Livrable : UN fichier HTML avec JS/CSS.`;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn span');
+                const original = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = original, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>

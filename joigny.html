@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joigny Moquette | L'Art de l'Habillage Intérieur</title>
+    <meta name="description" content="Depuis 1979, Joigny Moquette sublime vos intérieurs. Sols, Peintures, Rideaux et Décoration sur 1000m² d'exposition.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET & BASE --- */
+        :root {
+            --bg-color: #0a0a0a;
+            --text-main: #e0e0e0;
+            --text-muted: #888;
+            --accent: #ccff00; /* Vert Acide ultra moderne */
+            --accent-dim: #aacc00;
+            --card-bg: #141414;
+            --border: rgba(255,255,255,0.1);
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; object-fit: cover; }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-padding { padding: 8rem 0; }
+
+        .title-display {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 8rem);
+            font-weight: 700;
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .title-medium {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .accent-text { color: var(--accent); }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--accent);
+            color: #000;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn:hover { transform: scale(1.05); background: #fff; }
+
+        /* --- LOADER --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--accent);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.8s ease-in-out;
+        }
+        .loader-text {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: #000;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards 0.2s;
+        }
+        .loader-hidden { transform: translateY(-100%); }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 0;
+            mix-blend-mode: difference;
+        }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+        .menu-btn {
+            cursor: pointer;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, #2a2a2a 0%, #0a0a0a 70%);
+            z-index: -1;
+        }
+        /* Abstract animated lines */
+        .line-art {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: rgba(255,255,255,0.05);
+            left: 20%;
+        }
+        .line-art:nth-child(2) { left: 50%; }
+        .line-art:nth-child(3) { left: 80%; }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- MARQUEE (Scrolling Text) --- */
+        .marquee-container {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            background: #000;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: scroll 20s linear infinite;
+        }
+        .marquee-item {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+            margin: 0 2rem;
+            text-transform: uppercase;
+        }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* --- SERVICES (Bento Grid) --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto auto;
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+        }
+
+        .service-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .card-lg { grid-column: span 8; }
+        .card-sm { grid-column: span 4; }
+        .card-md { grid-column: span 6; }
+
+        @media (max-width: 900px) {
+            .card-lg, .card-sm, .card-md { grid-column: span 12; }
+        }
+
+        .card-num {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: rgba(255,255,255,0.05);
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            font-weight: 700;
+        }
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .card-img-overlay {
+            position: absolute;
+            bottom: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            filter: blur(80px);
+            opacity: 0.2;
+            transition: 0.5s;
+        }
+        .service-card:hover .card-img-overlay {
+            opacity: 0.4;
+            bottom: -30%;
+        }
+
+        /* --- ABOUT --- */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .stat-item h3 {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+        .stat-item p {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        /* --- INTERACTIVE LIST (Services Details) --- */
+        .list-item {
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+        .list-item:first-child { border-top: 1px solid var(--border); }
+        
+        .list-item:hover { padding-left: 2rem; background: rgba(255,255,255,0.02); }
+        .list-item:hover .list-title { color: var(--accent); }
+        
+        .list-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            transition: 0.3s;
+        }
+        .list-arrow {
+            font-size: 2rem;
+            transform: rotate(-45deg);
+            transition: 0.3s;
+        }
+        .list-item:hover .list-arrow { transform: rotate(0deg) translateX(10px); color: var(--accent); }
+
+        /* --- CONTACT --- */
+        .footer-cta {
+            text-align: center;
+            padding: 10rem 0 5rem;
+        }
+        .big-link {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 5rem);
+            color: #fff;
+            position: relative;
+            display: inline-block;
+        }
+        .big-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 4px;
+            bottom: 10px;
+            left: 0;
+            background: var(--accent);
+            transition: 0.4s;
+        }
+        .big-link:hover::after { width: 100%; }
+
+        .footer-info {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .footer-col h4 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-family: var(--font-display);
+        }
+        .footer-col p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* --- ANIMATIONS --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .about-layout { grid-template-columns: 1fr; }
+            .title-display { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-text">JOIGNY MOQUETTE</div>
+    </div>
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">JOIGNY MOQUETTE<span style="color:var(--accent)">.</span></div>
+            <div class="menu-btn">Menu</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="line-art"></div>
+        <div class="line-art"></div>
+        <div class="line-art"></div>
+        
+        <div class="container hero-content">
+            <div class="hero-subtitle fade-in">Expertise 89300 • Depuis 1979</div>
+            <h1 class="title-display fade-in" style="transition-delay: 0.1s">
+                L'HABILLAGE <br>
+                DE VOS <span class="accent-text">ESPACES.</span>
+            </h1>
+            <p style="max-width: 500px; margin-top: 2rem; color: var(--text-muted);" class="fade-in" style="transition-delay: 0.2s">
+                Plus qu'un revêtement, une signature. Découvrez notre showroom de 1000m² dédié à l'aménagement intérieur. Sols, murs, textiles et finitions sur-mesure.
+            </p>
+            <div style="margin-top: 3rem;" class="fade-in" style="transition-delay: 0.3s">
+                <a href="#contact" class="btn">Visiter le Showroom</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span class="marquee-item">MOQUETTE</span>
+            <span class="marquee-item">PARQUET</span>
+            <span class="marquee-item">BÉTON CIRÉ</span>
+            <span class="marquee-item">PAPIER PEINT</span>
+            <span class="marquee-item">RIDEAUX SUR MESURE</span>
+            <span class="marquee-item">PEINTURE</span>
+            <span class="marquee-item">JOIGNY</span>
+            <span class="marquee-item">MOQUETTE</span>
+            <span class="marquee-item">PARQUET</span>
+            <span class="marquee-item">BÉTON CIRÉ</span>
+            <span class="marquee-item">PAPIER PEINT</span>
+            <span class="marquee-item">RIDEAUX SUR MESURE</span>
+            <span class="marquee-item">PEINTURE</span>
+            <span class="marquee-item">JOIGNY</span>
+        </div>
+    </div>
+
+    <section class="section-padding container">
+        <h2 class="title-medium fade-in">NOS UNIVERS <span class="accent-text">CRÉATIFS</span></h2>
+        
+        <div class="services-grid">
+            <div class="service-card card-lg fade-in">
+                <div class="card-num">01</div>
+                <div class="card-content">
+                    <h3 class="card-title">Sols & Parquets</h3>
+                    <p class="card-desc">L'élégance sous vos pieds. Du parquet massif traditionnel aux solutions techniques modernes (PVC, Vinyle, Moquette acoustique). Installation par nos artisans soliers qualifiés.</p>
+                </div>
+                <div class="card-img-overlay"></div>
+            </div>
+
+            <div class="service-card card-sm fade-in" style="transition-delay: 0.1s">
+                <div class="card-num">02</div>
+                <div class="card-content">
+                    <h3 class="card-title">Murs & Couleurs</h3>
+                    <p class="card-desc">Peintures haute définition, papiers peints panoramiques et enduits décoratifs pour structurer vos volumes.</p>
+                </div>
+                <div class="card-img-overlay" style="background: #fff;"></div>
+            </div>
+
+            <div class="service-card card-md fade-in">
+                <div class="card-num">03</div>
+                <div class="card-content">
+                    <h3 class="card-title">Décoration Textile</h3>
+                    <p class="card-desc">Confection sur-mesure de rideaux, voilages et stores. L'habillage fenêtre qui change tout.</p>
+                </div>
+                <div class="card-img-overlay"></div>
+            </div>
+
+            <div class="service-card card-md fade-in" style="transition-delay: 0.1s">
+                <div class="card-num">04</div>
+                <div class="card-content">
+                    <h3 class="card-title">Tapis & Peaux</h3>
+                    <p class="card-desc">Une sélection exclusive de tapis mécaniques et peaux naturelles pour apporter chaleur et caractère.</p>
+                </div>
+                <div class="card-img-overlay"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: #0f0f0f;">
+        <div class="container about-layout">
+            <div class="fade-in">
+                <div class="hero-subtitle">NOTRE ADN</div>
+                <h2 class="title-medium">L'ARTISANAT DU FUTUR<br>À JOIGNY.</h2>
+                <p style="color: var(--text-muted);">
+                    Fondée en 1979, Joigny Moquette n'est pas seulement un magasin, c'est une institution locale de la décoration. Nous fusionnons 45 ans d'expertise technique avec les tendances les plus avant-gardistes du design d'intérieur.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <h3>1000<span style="font-size:1.5rem">m²</span></h3>
+                        <p>Showroom</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>1979</h3>
+                        <p>Fondation</p>
+                    </div>
+                </div>
+            </div>
+            <div style="position: relative; height: 400px; background: #222; border-radius: 8px; overflow: hidden;" class="fade-in">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop" alt="Texture Matière" style="width:100%; height:100%; object-fit:cover; opacity: 0.6;">
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding container">
+        <h2 class="title-medium fade-in" style="margin-bottom: 3rem;">SERVICES <span class="accent-text">PREMIUM</span></h2>
+        
+        <div class="interactive-list">
+            <div class="list-item fade-in">
+                <span class="list-title">Pose & Installation</span>
+                <span class="list-arrow">→</span>
+            </div>
+            <div class="list-item fade-in" style="transition-delay: 0.1s">
+                <span class="list-title">Confection sur-mesure</span>
+                <span class="list-arrow">→</span>
+            </div>
+            <div class="list-item fade-in" style="transition-delay: 0.2s">
+                <span class="list-title">Nettoyage Tapis & Rideaux</span>
+                <span class="list-arrow">→</span>
+            </div>
+            <div class="list-item fade-in" style="transition-delay: 0.3s">
+                <span class="list-title">Conseil Décoration à Domicile</span>
+                <span class="list-arrow">→</span>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-cta fade-in">
+                <p style="text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">Un projet en tête ?</p>
+                <a href="mailto:joigny.moquette@wanadoo.fr" class="big-link">joigny.moquette@<br>wanadoo.fr</a>
+                <div style="margin-top: 2rem;">
+                    <a href="tel:0386623652" class="btn" style="background: transparent; border: 1px solid var(--accent); color: var(--accent);">03 86 62 36 52</a>
+                </div>
+            </div>
+
+            <div class="footer-info">
+                <div class="footer-col">
+                    <h4>ADRESSE</h4>
+                    <p>34 Rue Aristide Briand<br>89300 JOIGNY</p>
+                </div>
+                <div class="footer-col">
+                    <h4>HORAIRES</h4>
+                    <p>Mar - Sam : 09h-12h / 14h30-19h<br>Fermé Dimanche & Lundi</p>
+                </div>
+                <div class="footer-col">
+                    <h4>RÉSEAUX</h4>
+                    <p><a href="#">Facebook</a> • <a href="#">Instagram</a></p>
+                </div>
+                <div class="footer-col">
+                    <p style="opacity: 0.3;">© 2025 Joigny Moquette. Design Concept.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loader Animation
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 1000);
+        });
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Simple Smooth Scroll for Anchors
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
