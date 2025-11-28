@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Monde | L'Actualité réinventée</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --lm-black: #0a0a0a;
+            --lm-paper: #f0f0ed;
+            --lm-yellow: #fff200; /* Jaune néon pour moderniser */
+            --lm-grey: #a0a0a0;
+            --grid-gap: 2px;
+
+            --font-head: 'Playfair Display', serif;
+            --font-logo: 'Cinzel', serif;
+            --font-meta: 'Space Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: none; /* On cache le curseur natif pour un custom */
+        }
+
+        body {
+            background-color: var(--lm-black); /* Fond sombre pour les espacements de grille */
+            color: var(--lm-black);
+            font-family: var(--font-head);
+            overflow-x: hidden;
+        }
+
+        /* --- CURSEUR PERSONNALISÉ --- */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--lm-black);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--lm-black);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Effet hover sur liens */
+        body:hover .cursor-outline.hovered {
+            width: 80px;
+            height: 80px;
+            background-color: var(--lm-yellow);
+            border-color: transparent;
+            mix-blend-mode: difference;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: var(--lm-paper);
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--lm-black);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .date-display {
+            font-family: var(--font-meta);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .brand-logo {
+            font-family: var(--font-logo); /* Substitution pour le style Gothique */
+            font-size: 3rem;
+            line-height: 0.8;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: -2px;
+        }
+
+        .menu-btn {
+            font-family: var(--font-meta);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .menu-btn::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--lm-black);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .menu-btn:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* --- BREAKING NEWS TICKER --- */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--lm-black);
+            color: var(--lm-paper);
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            animation: ticker 30s linear infinite;
+            font-family: var(--font-meta);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            padding: 0 2rem;
+        }
+
+        .ticker-item span { color: var(--lm-yellow); font-weight: bold; margin-right: 10px; }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* --- GRID LAYOUT (BENTO) --- */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(300px, auto);
+            gap: var(--grid-gap);
+            background-color: var(--lm-black); /* Crée les bordures noires entre les blocs */
+            padding-bottom: var(--grid-gap);
+        }
+
+        .card {
+            background-color: var(--lm-paper);
+            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        .card:hover {
+            background-color: #fff;
+        }
+
+        .card-img-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            filter: grayscale(100%);
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Meta tags (category, time) */
+        .meta {
+            font-family: var(--font-meta);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 10px;
+            width: fit-content;
+        }
+
+        .tag { font-weight: 700; }
+        .time { color: var(--lm-grey); }
+
+        /* Typography Styles */
+        h1, h2, h3 {
+            font-weight: 400;
+        }
+
+        /* --- SPECIFIC CARD SIZES --- */
+
+        /* A LA UNE (HERO) */
+        .card-hero {
+            grid-column: span 8;
+            grid-row: span 2;
+            min-height: 80vh;
+            color: white; /* Texte blanc sur image */
+        }
+
+        .card-hero .card-img { filter: brightness(0.7) grayscale(20%); }
+        .card-hero:hover .card-img { filter: brightness(0.6) grayscale(0%); }
+        .card-hero .meta { border-color: rgba(255,255,255,0.3); }
+        .card-hero .time { color: rgba(255,255,255,0.7); }
+
+        .card-hero h1 {
+            font-size: 4.5rem;
+            line-height: 0.95;
+            margin-top: auto;
+            max-width: 90%;
+        }
+
+        .card-hero p {
+            font-family: var(--font-meta);
+            margin-top: 20px;
+            font-size: 1.1rem;
+            max-width: 60%;
+            line-height: 1.6;
+            border-left: 2px solid var(--lm-yellow);
+            padding-left: 20px;
+        }
+
+        /* SIDEBAR (OPINION) */
+        .card-side {
+            grid-column: span 4;
+            display: flex;
+            justify-content: center;
+        }
+
+        .opinion-piece {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .opinion-piece:last-child { border-bottom: none; }
+
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ddd;
+            margin-bottom: 15px;
+            filter: grayscale(100%);
+        }
+
+        .card-side h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .quote-icon {
+            font-size: 4rem;
+            color: var(--lm-yellow);
+            line-height: 0;
+            margin-top: 20px;
+            display: block;
+        }
+
+        /* STANDARD ARTICLE */
+        .card-standard {
+            grid-column: span 4;
+            min-height: 400px;
+        }
+
+        .card-standard h2 {
+            font-size: 2rem;
+            margin-top: auto;
+            background: var(--lm-paper); /* Hack pour lisibilité si image */
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            display: inline;
+            padding: 5px 0;
+        }
+
+        .card-wide {
+            grid-column: span 6;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--lm-black);
+            color: var(--lm-paper);
+            padding: 80px 40px;
+            font-family: var(--font-meta);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .footer-col h4 {
+            color: var(--lm-yellow);
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 10px; opacity: 0.7; transition: 0.3s; }
+        .footer-col li:hover { opacity: 1; color: var(--lm-yellow); transform: translateX(5px); }
+
+        .btn-subscribe {
+            background: var(--lm-yellow);
+            color: var(--lm-black);
+            border: none;
+            padding: 15px 30px;
+            font-family: var(--font-meta);
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: transform 0.2s;
+        }
+
+        .btn-subscribe:hover { transform: scale(1.05); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .card-hero h1 { font-size: 3rem; }
+            .main-grid { display: flex; flex-direction: column; }
+            .card { min-height: auto; height: auto; }
+            .card-hero { height: 60vh; }
+            .brand-logo { font-size: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-outline" id="cursor-outline"></div>
+
+<header>
+    <div class="date-display" id="current-date">Jeudi 24 Octobre</div>
+    <div class="brand-logo">Le Monde<span style="color:var(--lm-yellow)">.</span></div>
+    <div class="menu-btn link-hover">Menu</div>
+</header>
+
+<div class="ticker-wrap">
+    <div class="ticker">
+        <div class="ticker-item"><span>EN DIRECT</span> COP29 : Les négociations entrent dans une phase critique à Bakou</div>
+        <div class="ticker-item"><span>ÉCONOMIE</span> Le CAC 40 atteint un nouveau sommet historique</div>
+        <div class="ticker-item"><span>CULTURE</span> Rétrospective Rothko : L'exposition de la décennie ouvre ses portes</div>
+        <div class="ticker-item"><span>TECH</span> L'UE vote une nouvelle loi sur la régulation de l'IA générative</div>
+    </div>
+</div>
+
+<main class="main-grid">
+
+    <article class="card card-hero link-hover">
+        <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop" alt="Bureaucracy Art" class="card-img">
+        </div>
+        <div class="card-content">
+            <div class="meta">
+                <span class="tag" style="background:var(--lm-yellow); color:black; padding:0 5px;">À La Une</span>
+                <span class="time">Lecture 8 min</span>
+            </div>
+            <div>
+                <h1>La fin du travail tel que nous le connaissons ?</h1>
+                <p>Enquête exclusive sur la mutation silencieuse des cols blancs face à la vague d'automatisation cognitive. Entre peur et libération.</p>
+            </div>
+        </div>
+    </article>
+
+    <div class="card card-side">
+        <div class="card-content">
+            <div class="meta"><span class="tag">Idées & Débats</span></div>
+
+            <div class="opinion-piece link-hover">
+                <span class="quote-icon">“</span>
+                <h3>Le courage de la nuance dans un monde binaire.</h3>
+                <div class="meta" style="border:none; margin-top:10px;">
+                    <span class="tag">Éditorial</span>
+                    <span class="time">Par Jérôme Fenoglio</span>
+                </div>
+            </div>
+
+            <div class="opinion-piece link-hover">
+                <span class="quote-icon">“</span>
+                <h3>Pourquoi l'Europe doit réinventer son modèle numérique.</h3>
+                <div class="meta" style="border:none; margin-top:10px;">
+                    <span class="tag">Tribune</span>
+                    <span class="time">Par Julia Cagé</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <article class="card card-standard link-hover">
+        <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop" alt="Cyberpunk City" class="card-img">
+        </div>
+        <div class="card-content">
+            <div class="meta"><span class="tag">International</span></div>
+            <h2>Tokyo : La révolution silencieuse de l'urbanisme nocturne.</h2>
+        </div>
+    </article>
+
+    <article class="card card-standard link-hover" style="background: var(--lm-black); color: var(--lm-paper);">
+        <div class="card-content">
+            <div class="meta"><span class="tag" style="color:var(--lm-yellow)">Planète</span></div>
+            <h2 style="background: transparent;">Rapport Climat : Les chiffres que l'on ne peut plus ignorer.</h2>
+            <p style="font-family: var(--font-meta); margin-top:20px; opacity:0.8;">Visualisation de données interactive.</p>
+        </div>
+    </article>
+
+    <article class="card card-standard link-hover">
+        <div class="card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1974&auto=format&fit=crop" alt="Cinema" class="card-img">
+        </div>
+        <div class="card-content">
+            <div class="meta"><span class="tag">Cinéma</span></div>
+            <h2>Cannes 2025 : Retour sur une sélection explosive.</h2>
+        </div>
+    </article>
+
+    <article class="card card-standard card-wide link-hover">
+        <div class="card-content" style="flex-direction: row; align-items: center; gap: 40px;">
+            <div style="flex:1">
+                <div class="meta"><span class="tag">Grand Format</span></div>
+                <h2 style="font-size: 2.5rem;">Les oubliés du Lithium.</h2>
+                <p style="font-family: var(--font-meta); margin-top: 20px;">Reportage au cœur des mines andines.</p>
+            </div>
+            <div style="flex:1; height: 100%; min-height: 250px; position: relative; overflow: hidden;">
+                <img src="https://images.unsplash.com/photo-1618172193763-c511deb635ca?q=80&w=1964&auto=format&fit=crop" style="width:100%; height:100%; object-fit:cover;" alt="Landscape">
+            </div>
+        </div>
+    </article>
+
+    <article class="card card-standard card-wide link-hover" style="background-color: var(--lm-yellow);">
+        <div class="card-content" style="align-items: center; justify-content: center; text-align: center;">
+            <h2 style="background: transparent; font-size: 3rem; color: var(--lm-black);">Abonnez-vous.</h2>
+            <p style="font-family: var(--font-meta); margin-top: 10px; margin-bottom: 20px;">Soutenez le journalisme indépendant.</p>
+            <button style="background: black; color: white; border: none; padding: 15px 30px; font-family: var(--font-meta); font-weight: bold; cursor: none;">Offre Spéciale - 1€</button>
+        </div>
+    </article>
+
+</main>
+
+<footer>
+    <div class="footer-col">
+        <h4>Rubriques</h4>
+        <ul>
+            <li>International</li>
+            <li>Politique</li>
+            <li>Société</li>
+            <li>Les Décodeurs</li>
+        </ul>
+    </div>
+    <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+            <li>Le Monde Évènements</li>
+            <li>Formation</li>
+            <li>Guide d'achat</li>
+        </ul>
+    </div>
+    <div class="footer-col" style="flex: 2; text-align: right;">
+        <div class="brand-logo" style="font-size: 2rem; text-align: right; margin-bottom: 20px;">Le Monde.</div>
+        <p style="opacity: 0.5; font-size: 0.8rem;">© 2025 Société éditrice du Monde</p>
+    </div>
+</footer>
+
+<script>
+  // --- CUSTOM CURSOR LOGIC ---
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorOutline = document.getElementById('cursor-outline');
+
+  window.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    // Dot follows instantly
+    cursorDot.style.left = `${posX}px`;
+    cursorDot.style.top = `${posY}px`;
+
+    // Outline follows with slight delay (handled by CSS transition, we just update position)
+    // But for smoother JS animation usually we use requestAnimationFrame,
+    // here simple update works with CSS transition on outline
+    cursorOutline.animate({
+      left: `${posX}px`,
+      top: `${posY}px`
+    }, { duration: 500, fill: "forwards" });
+  });
+
+  // Add hover effect for links and clickable elements
+  const hoverables = document.querySelectorAll('.link-hover, button, a');
+
+  hoverables.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorOutline.classList.add('hovered');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursorOutline.classList.remove('hovered');
+    });
+  });
+
+  // --- DATE UPDATE ---
+  const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  document.getElementById('current-date').textContent = new Date().toLocaleDateString('fr-FR', dateOptions);
+
+</script>
+</body>
+</html>

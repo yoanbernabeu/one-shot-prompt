@@ -124,5 +124,14 @@
       "author": "Beninho",
       "gemini_url": "lequipe.html",
       "original_url": "https://www.lequipe.fr/"
+    },
+    {
+        "id": "lemonde",
+        "name": "Le Monde",
+        "description": "Le Monde.fr - Actualités et Infos en France et dans le monde",
+        "icon": "\uD83C\uDF0D",
+        "author": "Beninho",
+        "gemini_url": "lemonde.html",
+        "original_url": "https://www.lemonde.fr/"
     }
 ]
