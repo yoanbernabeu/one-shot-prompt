@@ -21,8 +21,8 @@ Livrable : UN fichier HTML avec JS/CSS.
 ```
 
 ### 2. Générer la page
-Soumettez ce prompt à votre LLM favori.
-*   **Important** : Ne faites pas de retouches manuelles majeures. Le but est de voir ce que le modèle sort "One Shot". Les petites corrections de bugs bloquants (chemins d'images, syntaxe HTML cassée) sont acceptées.
+Soumettez ce prompt à Gemini 3 Pro.
+*   **Important** : Ne faites pas de retouches manuelles majeures. Le but est de voir ce que le modèle sort "One Shot".
 
 ### 3. Ajouter votre fichier
 1.  Créez un fichier HTML à la racine du projet (ex: `mon-projet.html`).
