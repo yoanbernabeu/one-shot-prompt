@@ -97,5 +97,23 @@
         "author": "Frulko",
         "gemini_url": "mdn.html",
         "original_url": "https://developer.mozilla.org/"
+    },
+    {
+        "id": "api-platform",
+        "name": "API Platform",
+        "description": "Le framework pour construire des API web modernes.",
+        "icon": "🔌",
+        "author": "Frulko",
+        "gemini_url": "api_platform.html",
+        "original_url": "https://api-platform.com/"
+    },
+    {
+        "id": "Grafikart",
+        "name": "Grafikart.fr",
+        "description": "Tutoriels et Formations vidéos sur le développement web",
+        "icon": "🖌️",
+        "author": "Frulko",
+        "gemini_url": "grafikart.html",
+        "original_url": "https://www.grafikart.fr/"
     }
 ]

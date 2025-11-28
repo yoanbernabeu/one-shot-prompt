@@ -47,9 +47,13 @@ Ouvrez le fichier `projects.json` et ajoutez votre entrée dans le tableau :
 *   **author**: Votre pseudo GitHub ou nom.
 
 ### 5. Soumettre une Pull Request (PR)
-1.  Créez une nouvelle branche : `git checkout -b add-mon-projet`
-2.  Commitez vos changements : `git commit -m "Add Mon Projet example"`
-3.  Poussez et ouvrez une PR sur le dépôt.
+1.  **Forkez** le dépôt sur GitHub.
+2.  Clonez votre fork localement.
+3.  Créez une nouvelle branche pour votre projet.
+4.  Ajoutez vos fichiers (votre page HTML + la modification dans `projects.json`).
+5.  Commitez vos changements avec un message clair.
+6.  Poussez les changements sur votre fork.
+7.  Ouvrez une **Pull Request** sur le dépôt original depuis l'interface GitHub.
 
 ---
 
@@ -57,4 +61,5 @@ Ouvrez le fichier `projects.json` et ajoutez votre entrée dans le tableau :
 *   Respectez le [Code de Conduite](CODE_OF_CONDUCT.md).
 *   Assurez-vous que le contenu généré n'est pas offensant.
 *   Amusez-vous !
+
 
