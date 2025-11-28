@@ -79,5 +79,14 @@
         "author": "Mike Dreeman",
         "gemini_url": "gemini.html",
         "original_url": "https://gemini.google.com/"
+    },
+    {
+        "id": "kuartz",
+        "name": "Kuartz",
+        "description": "Site du groupe de rock Kuartz",
+        "icon": "💎",
+        "author": "Ibes Mongabure",
+        "gemini_url": "kuartz.html",
+        "original_url": "https://www.kuartz.eu/"
     }
 ]
