@@ -88,5 +88,14 @@
         "author": "Ibes Mongabure",
         "gemini_url": "kuartz.html",
         "original_url": "https://www.kuartz.eu/"
+    },
+    {
+        "id": "Grafikart",
+        "name": "Grafikart.fr",
+        "description": "Tutoriels et Formations vidéos sur le développement web",
+        "icon": "🖌️",
+        "author": "Frulko",
+        "gemini_url": "grafikart.html",
+        "original_url": "https://www.grafikart.fr/"
     }
 ]

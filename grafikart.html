@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafikart - Élevez votre niveau de code</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Palette Grafikart Réinventée */
+            --bg-deep: #0f172a;
+            --bg-surface: #1e293b;
+            --primary: #4f46e5; /* Indigo vibrant */
+            --accent: #38bdf8; /* Cyan électrique */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --glass: rgba(15, 23, 42, 0.7);
+            
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* Background FX */
+        .ambient-light {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header Flottant */
+        header {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            padding: 1rem 2rem;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover, nav a.active { color: white; }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), #4338ca);
+            color: white;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        /* HERO Section */
+        .hero {
+            padding: 12rem 2rem 6rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, white, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-family: var(--font-body);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        /* Hero Visual (Code Card) */
+        .hero-visual {
+            position: relative;
+        }
+
+        .code-card {
+            background: #1e293b;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transform: rotateY(-10deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .code-card:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .code-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ef4444; }
+        .yellow { background: #f59e0b; }
+        .green { background: #22c55e; }
+
+        .line { margin-bottom: 4px; display: block; }
+        .keyword { color: #c084fc; }
+        .string { color: #86efac; }
+        .func { color: #60a5fa; }
+
+        /* TECH STACK SCROLLER */
+        .tech-stack {
+            margin: 4rem 0;
+            overflow: hidden;
+            position: relative;
+            padding: 2rem 0;
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(0,0,0,0.1);
+        }
+
+        .tech-track {
+            display: flex;
+            gap: 4rem;
+            width: max-content;
+            animation: scroll 20s linear infinite;
+        }
+
+        .tech-item {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* BENTO GRID SECTIONS */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 280px);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            group;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* Card Sizes */
+        .col-span-2 { grid-column: span 2; }
+        .col-span-1 { grid-column: span 1; }
+        .row-span-2 { grid-row: span 2; }
+
+        /* Card Content */
+        .card-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            width: fit-content;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .tag-php { color: #8892bf; background: rgba(136, 146, 191, 0.15); }
+        .tag-js { color: #f7df1e; background: rgba(247, 223, 30, 0.15); }
+        .tag-css { color: #38bdf8; background: rgba(56, 189, 248, 0.15); }
+        .tag-premium { color: #f472b6; background: rgba(244, 114, 182, 0.15); border: 1px solid rgba(244, 114, 182, 0.3); }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 1.5rem;
+        }
+
+        /* Play Button Overlay */
+        .play-overlay {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: black;
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s;
+        }
+
+        .card:hover .play-overlay {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Featured Card Specifics */
+        .featured-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+        }
+        
+        .featured-card h3 {
+            font-size: 2rem;
+            font-family: var(--font-display);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 4rem 0;
+            border-top: 1px solid var(--card-border);
+            margin-top: 4rem;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 3rem; font-weight: 700; font-family: var(--font-display); color: white; }
+        .stat-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; }
+
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; text-align: center; padding-top: 8rem;}
+            .hero-content p { margin: 0 auto 2.5rem; }
+            .hero-visual { display: none; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            header { width: 95%; padding: 1rem; }
+            nav { display: none; } /* Simplified for mobile demo */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">G</div>
+            <span>Grafikart</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Tutoriels</a></li>
+                <li><a href="#">Formations</a></li>
+                <li><a href="#">Forum</a></li>
+                <li><a href="#">Jobs</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-ghost">Connexion</button>
+            <button class="btn btn-primary">Premium 💎</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="card-tag tag-premium" style="margin-bottom: 1.5rem; display: inline-block;">Nouveau : Formation Laravel</div>
+                <h1><span class="gradient-text">Apprendre. Coder.</span><br>Évoluer ensemble.</h1>
+                <p>Découvrez plus de 500h de tutoriels sur le développement web. HTML, CSS, JavaScript, PHP, et bien plus encore.</p>
+                
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Que voulez-vous apprendre aujourd'hui ?">
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="code-card">
+                    <div class="code-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <span class="line"><span class="keyword">class</span> <span class="func">Developer</span> {</span>
+                    <span class="line">&nbsp;&nbsp;<span class="keyword">constructor</span>(passion) {</span>
+                    <span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.level = <span class="string">'Junior'</span>;</span>
+                    <span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.source = <span class="string">'Grafikart'</span>;</span>
+                    <span class="line">&nbsp;&nbsp;}</span>
+                    <span class="line"></span>
+                    <span class="line">&nbsp;&nbsp;<span class="keyword">async</span> <span class="func">evolve</span>() {</span>
+                    <span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">await</span> <span class="keyword">this</span>.learn(<span class="string">'React'</span>);</span>
+                    <span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">'Senior Dev 🚀'</span>;</span>
+                    <span class="line">&nbsp;&nbsp;}</span>
+                    <span class="line">}</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="tech-stack">
+            <div class="tech-track">
+                <div class="tech-item">React</div>
+                <div class="tech-item">Laravel</div>
+                <div class="tech-item">Vue.js</div>
+                <div class="tech-item">Symfony</div>
+                <div class="tech-item">Node.js</div>
+                <div class="tech-item">Docker</div>
+                <div class="tech-item">TypeScript</div>
+                <div class="tech-item">React</div>
+                <div class="tech-item">Laravel</div>
+                <div class="tech-item">Vue.js</div>
+                <div class="tech-item">Symfony</div>
+                <div class="tech-item">Node.js</div>
+                <div class="tech-item">Docker</div>
+                <div class="tech-item">TypeScript</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Derniers Tutoriels</h2>
+                <a href="#" class="btn btn-ghost" style="border-radius: 8px;">Voir tout →</a>
+            </div>
+
+            <div class="bento-grid">
+                <article class="card col-span-2 row-span-2 featured-card">
+                    <div>
+                        <span class="card-tag tag-php">PHP 8.4</span>
+                        <h3>Découverte des nouveautés de PHP 8.4</h3>
+                        <p style="margin-top: 1rem;">Une plongée en profondeur dans les nouvelles fonctionnalités : Property Hooks, Array find, et plus encore. Préparez votre codebase pour le futur.</p>
+                    </div>
+                    <div class="card-meta">
+                        <span>🕒 24 min</span>
+                        <span>📅 Il y a 2 jours</span>
+                        <span>💬 42 commentaires</span>
+                    </div>
+                    <div class="play-overlay">▶</div>
+                </article>
+
+                <article class="card col-span-1">
+                    <span class="card-tag tag-js">JavaScript</span>
+                    <h3>L'API View Transitions</h3>
+                    <div class="card-meta">
+                        <span>🕒 12 min</span>
+                    </div>
+                    <div class="play-overlay">▶</div>
+                </article>
+
+                <article class="card col-span-1">
+                    <span class="card-tag tag-css">CSS</span>
+                    <h3>CSS Nesting natif</h3>
+                    <div class="card-meta">
+                        <span>🕒 08 min</span>
+                    </div>
+                    <div class="play-overlay">▶</div>
+                </article>
+
+                <article class="card col-span-1">
+                    <span class="card-tag tag-premium">Premium</span>
+                    <h3>Architecture Hexagonale</h3>
+                    <div class="card-meta">
+                        <span>🕒 1h 20m</span>
+                    </div>
+                    <div class="play-overlay">▶</div>
+                </article>
+
+                 <article class="card col-span-1">
+                    <span class="card-tag tag-js">React</span>
+                    <h3>Server Components</h3>
+                    <div class="card-meta">
+                        <span>🕒 45 min</span>
+                    </div>
+                    <div class="play-overlay">▶</div>
+                </article>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-num" data-val="635">635h</div>
+                    <div class="stat-label">de contenu</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" data-val="180">180k</div>
+                    <div class="stat-label">Membres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" data-val="2000">2000+</div>
+                    <div class="stat-label">Vidéos</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Micro-interaction : 3D tilt sur les cartes au survol
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Effet de lueur subtil suivant la souris
+                card.style.background = `radial-gradient(circle at ${x}px ${y}px, #2a3855, #1e293b)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.background = '#1e293b'; // Reset
+            });
+        });
+
+        // Animation simple des chiffres
+        const stats = document.querySelectorAll('.stat-num');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    // Ici on pourrait ajouter une logique de comptage JS
+                }
+            });
+        });
+        
+        stats.forEach(s => observer.observe(s));
+    </script>
+</body>
+</html>
