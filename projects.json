@@ -60,7 +60,7 @@
         "icon": "🏥",
         "author": "Mike Dreeman",
         "gemini_url": "ansm.html",
-        "original_url": "https://www.ansm.fr/"
+        "original_url": "https://ansm.sante.fr/"
     },
     {
         "id": "colorazen",
@@ -70,5 +70,14 @@
         "author": "Geoffrey Monté",
         "gemini_url": "colorazen.html",
         "original_url": "https://colorazen.com/"
+    },
+    {
+        "id": "gemini",
+        "name": "Gemini",
+        "description": "Gemini is a general-purpose AI model developed by Google.",
+        "icon": "🤖",
+        "author": "Mike Dreeman",
+        "gemini_url": "gemini.html",
+        "original_url": "https://gemini.google.com/"
     }
 ]
