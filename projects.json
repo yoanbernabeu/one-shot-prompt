@@ -60,6 +60,15 @@
         "icon": "🏥",
         "author": "Mike Dreeman",
         "gemini_url": "ansm.html",
-        "original_url": "https://www.ansm.fr/"
+        "original_url": "https://ansm.sante.fr/"
+    },
+    {
+        "id": "gemini",
+        "name": "Gemini",
+        "description": "Gemini is a general-purpose AI model developed by Google.",
+        "icon": "🤖",
+        "author": "Mike Dreeman",
+        "gemini_url": "gemini.html",
+        "original_url": "https://gemini.google.com/"
     }
 ]
