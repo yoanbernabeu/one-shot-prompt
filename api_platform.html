@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Platform - The Next Gen Framework</title>
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-color: #050505;
+            --surface-color: #121212;
+            --surface-border: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-cyan: #00f2ff;
+            --accent-purple: #bd00ff;
+            --accent-gradient: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-color);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: var(--surface-border);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* --- BACKGROUND FX --- */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+        .orb-1 { width: 400px; height: 400px; background: var(--accent-purple); top: -100px; right: -100px; animation: float 10s infinite alternate; }
+        .orb-2 { width: 300px; height: 300px; background: var(--accent-cyan); bottom: 10%; left: -50px; animation: float 15s infinite alternate-reverse; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 50px); }
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        .logo span { color: var(--accent-cyan); }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-size: 0.9rem; color: var(--text-secondary); }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .stack-selector {
+            display: inline-flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding: 5px;
+            background: var(--surface-border);
+            border-radius: 50px;
+        }
+        .stack-option {
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-secondary);
+        }
+        .stack-option.active {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* --- FEATURE GRID (BENTO) --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 300px);
+            gap: 20px;
+            padding: 50px 0;
+        }
+
+        .bento-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .bento-card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .bento-card p { color: var(--text-secondary); font-size: 0.95rem; }
+        
+        /* Grid Spans */
+        .span-2 { grid-column: span 2; }
+        .span-full { grid-column: span 4; }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+
+        /* --- CODE PREVIEW --- */
+        .code-window {
+            background: #0f0f0f;
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #d4d4d4;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            grid-column: span 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .dots { display: flex; gap: 6px; margin-bottom: 15px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .syntax-keyword { color: #c678dd; }
+        .syntax-class { color: #e5c07b; }
+        .syntax-string { color: #98c379; }
+        .syntax-comment { color: #5c6370; }
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid var(--surface-border);
+            padding: 60px 0;
+            margin-top: 50px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 3rem; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .span-2, .span-full { grid-column: auto; }
+            .code-window { display: none; } /* Hide code on mobile for simplicity */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">API <span>Platform</span></div>
+            <div class="nav-links">
+                <a href="#">Documentation</a>
+                <a href="#">Community</a>
+                <a href="#">Enterprise</a>
+                <a href="#">Events</a>
+            </div>
+            <a href="#" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.8rem;">Get Started</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="stack-selector">
+                <div class="stack-option active">Symfony</div>
+                <div class="stack-option">Laravel</div>
+            </div>
+            <h1>The API-First <br><span class="text-gradient">Framework</span></h1>
+            <p>
+                Créez des API web REST et GraphQL modernes, documentées et pilotées par les standards en quelques minutes. 
+                L'outil ultime pour les développeurs exigeants.
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <a href="#" class="btn btn-primary">Installer maintenant</a>
+                <a href="#" class="btn btn-outline">Lire la doc</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="container">
+        <div class="bento-grid">
+            <div class="bento-card span-2">
+                <div class="card-icon">🚀</div>
+                <div>
+                    <h3>Vitesse Extrême</h3>
+                    <p>Définissez vos ressources sous forme de classes PHP. API Platform s'occupe du reste : pagination, validation, filtrage et persistance.</p>
+                </div>
+            </div>
+
+            <div class="code-window">
+                <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <div>
+                    <span class="syntax-keyword">namespace</span> App\ApiResource;<br><br>
+                    <span class="syntax-keyword">use</span> ApiPlatform\Metadata\ApiResource;<br><br>
+                    <span class="syntax-comment">#[ApiResource]</span><br>
+                    <span class="syntax-keyword">class</span> <span class="syntax-class">Product</span> {<br>
+                    &nbsp;&nbsp;<span class="syntax-keyword">public</span> <span class="syntax-class">int</span> $id;<br>
+                    &nbsp;&nbsp;<span class="syntax-keyword">public</span> <span class="syntax-class">string</span> $name;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="bento-card">
+                <div class="card-icon">🌐</div>
+                <h3>Standards Ouverts</h3>
+                <p>Support natif de JSON-LD, Hydra, JSON:API, OpenAPI, et plus encore.</p>
+            </div>
+
+            <div class="bento-card">
+                <div class="card-icon">⚛️</div>
+                <h3>Client Generator</h3>
+                <p>Générez vos apps Next.js, Nuxt ou React Native à partir de votre API en une commande.</p>
+            </div>
+
+            <div class="bento-card span-2">
+                <div class="card-icon">⚡</div>
+                <h3>Temps Réel avec Mercure</h3>
+                <p>Diffusez automatiquement les mises à jour de vos données à tous les clients connectés. Plus de polling, juste de la performance pure.</p>
+            </div>
+            
+            <div class="bento-card span-2" style="background: linear-gradient(135deg, rgba(189, 0, 255, 0.1), rgba(0, 0, 0, 0));">
+                <div class="card-icon">🎛️</div>
+                <h3>Admin Interface</h3>
+                <p>Une interface B2B magnifique et entièrement personnalisable générée dynamiquement pour gérer vos données.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>API Platform est un logiciel libre sponsorisé par <span style="color:white;">Les-Tilleuls.coop</span></p>
+            <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.6;">Design Concept © 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Interaction: 3D Tilt Effect on Cards
+        const cards = document.querySelectorAll('.bento-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.08), rgba(255,255,255,0.03))`;
+                card.style.borderColor = `rgba(255,255,255,0.2)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.background = 'var(--glass-bg)';
+                card.style.borderColor = 'var(--glass-border)';
+            });
+        });
+
+        // Toggle Stack
+        const stacks = document.querySelectorAll('.stack-option');
+        stacks.forEach(stack => {
+            stack.addEventListener('click', () => {
+                stacks.forEach(s => s.classList.remove('active'));
+                stack.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

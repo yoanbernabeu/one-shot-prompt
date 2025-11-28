@@ -90,6 +90,15 @@
         "original_url": "https://www.kuartz.eu/"
     },
     {
+        "id": "api-platform",
+        "name": "API Platform",
+        "description": "Le framework pour construire des API web modernes.",
+        "icon": "🔌",
+        "author": "Frulko",
+        "gemini_url": "api_platform.html",
+        "original_url": "https://api-platform.com/"
+    },
+    {
         "id": "Grafikart",
         "name": "Grafikart.fr",
         "description": "Tutoriels et Formations vidéos sur le développement web",
