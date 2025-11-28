@@ -30,3 +30,4 @@ Les cas de comportement abusif, harcelant ou autrement inacceptable peuvent êtr
 
 Ce code de conduite est adapté du [Contributor Covenant](https://www.contributor-covenant.org), version 1.4.
 
+

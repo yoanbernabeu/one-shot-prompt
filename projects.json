@@ -97,5 +97,14 @@
         "author": "Frulko",
         "gemini_url": "api_platform.html",
         "original_url": "https://api-platform.com/"
+    },
+    {
+        "id": "Grafikart",
+        "name": "Grafikart.fr",
+        "description": "Tutoriels et Formations vidéos sur le développement web",
+        "icon": "🖌️",
+        "author": "Frulko",
+        "gemini_url": "grafikart.html",
+        "original_url": "https://www.grafikart.fr/"
     }
 ]
