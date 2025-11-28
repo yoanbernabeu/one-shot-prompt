@@ -106,5 +106,14 @@
         "author": "Frulko",
         "gemini_url": "grafikart.html",
         "original_url": "https://www.grafikart.fr/"
+    },
+    {
+      "id": "lequipe",
+      "name": "L'Équipe",
+      "description": "Le sport en direct sur L'Équipe.",
+      "icon": "⚽",
+      "author": "Beninho",
+      "gemini_url": "lequipe.html",
+      "original_url": "https://www.lequipe.fr/"
     }
 ]

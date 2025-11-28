@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'ÉQUIPE NÉO - Concept Redesign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Teko:wght@300;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --brand-red: #E00201;
+            --brand-red-glow: rgba(224, 2, 1, 0.4);
+            --bg-dark: #050505;
+            --bg-card: #121212;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { font-family: 'Inter', sans-serif; letter-spacing: -0.04em; }
+        .text-gradient {
+            background: linear-gradient(90deg, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- UI COMPONENTS --- */
+        /* Badge Live */
+        .live-badge {
+            background: var(--brand-red);
+            color: white;
+            font-weight: 900;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .live-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(224, 2, 1, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(224, 2, 1, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(224, 2, 1, 0); }
+        }
+
+        /* --- HEADER (GLASSMORPHISM) --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+            background: rgba(5, 5, 5, 0.6);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            font-size: 2rem;
+            color: var(--brand-red);
+            letter-spacing: -2px;
+            position: relative;
+        }
+
+        /* Ticker dans le header */
+        .ticker-container {
+            flex-grow: 1;
+            margin: 0 3rem;
+            overflow: hidden;
+            position: relative;
+            background: var(--glass);
+            border-radius: 50px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            gap: 2rem;
+            animation: ticker 20s linear infinite;
+            white-space: nowrap;
+            padding-left: 2rem;
+        }
+
+        .ticker-item {
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        nav ul { display: flex; gap: 2rem; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav li { cursor: pointer; transition: var(--transition); opacity: 0.7; }
+        nav li:hover { opacity: 1; color: var(--brand-red); text-shadow: 0 0 10px var(--brand-red-glow); }
+
+        /* --- HERO GRID (BENTO STYLE) --- */
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 8rem 2rem 2rem 2rem;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 450px);
+            gap: 1.5rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .card-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.1);
+            opacity: 0.4;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        .card-meta {
+            font-size: 0.8rem;
+            color: var(--brand-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        /* Specific Grid Placements */
+        .hero-card {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .hero-card h3 {
+            font-size: 4rem;
+            background: linear-gradient(180deg, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub-card-tall { grid-row: span 2; }
+        .sub-card-wide { grid-column: span 2; }
+
+        /* --- SECTION EXPLORER --- */
+        .section-title {
+            font-size: 8rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.03);
+            text-align: right;
+            margin-top: -4rem;
+            margin-bottom: 2rem;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 4rem;
+            border-top: 1px solid var(--glass-border);
+            padding: 3rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-card { grid-column: span 2; }
+        }
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .hero-card { grid-column: span 1; grid-row: span 1; }
+            .hero-card h3 { font-size: 2.5rem; }
+            header { padding: 1rem; }
+            .ticker-container { display: none; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">L'ÉQUIPE<span style="color:white; font-style: normal; font-size:0.5em; vertical-align: super;">NÉO</span></div>
+
+    <div class="ticker-container">
+        <div class="ticker-wrapper" id="ticker">
+        </div>
+    </div>
+
+    <nav>
+        <ul>
+            <li>Football</li>
+            <li>Tennis</li>
+            <li>Rugby</li>
+            <li>F1</li>
+            <li>Podcast</li>
+            <li style="color: var(--brand-red);">Abonnés</li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-container">
+
+    <div class="section-title">A LA UNE</div>
+
+    <div class="bento-grid">
+
+        <article class="card hero-card">
+            <img src="https://images.unsplash.com/photo-1517466787929-bc90951d6dbb?q=80&w=1000&auto=format&fit=crop" class="card-img" alt="Football Stadium">
+            <div class="card-content">
+                <span class="live-badge">En Direct</span>
+                <div class="card-meta">Ligue des Champions</div>
+                <h3>NUIT MAGIQUE<br>À MADRID</h3>
+                <p style="color: #ccc; margin-top: 10px; max-width: 80%;">Les Merengues renversent la vapeur dans un match d'anthologie face à Manchester City. Analyse tactique exclusive.</p>
+            </div>
+        </article>
+
+        <article class="card sub-card-tall">
+            <img src="https://images.unsplash.com/photo-1622163642998-1ea14b60c57e?q=80&w=800&auto=format&fit=crop" class="card-img" alt="Tennis Player">
+            <div class="card-content">
+                <div class="card-meta">Roland-Garros</div>
+                <h3>Alcaraz,<br>Le Nouveau Roi ?</h3>
+            </div>
+        </article>
+
+        <article class="card">
+            <img src="https://images.unsplash.com/photo-1534431484252-8706c6460a8f?q=80&w=800&auto=format&fit=crop" class="card-img" alt="F1 Car">
+            <div class="card-content">
+                <div class="card-meta">Formule 1</div>
+                <h3>Verstappen<br>Intouchable</h3>
+            </div>
+        </article>
+
+        <article class="card">
+            <img src="https://images.unsplash.com/photo-1558667865-c8b8d23d51f6?q=80&w=800&auto=format&fit=crop" class="card-img" alt="Rugby">
+            <div class="card-content">
+                <div class="card-meta">Top 14</div>
+                <h3>Toulouse<br>En Patron</h3>
+            </div>
+        </article>
+
+        <article class="card sub-card-wide">
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1000&auto=format&fit=crop" class="card-img" alt="Basketball">
+            <div class="card-content">
+                <span class="live-badge">NBA NIGHT</span>
+                <div class="card-meta">Playoffs</div>
+                <h3>Wembanyama : "Je suis prêt pour l'histoire"</h3>
+            </div>
+        </article>
+
+    </div>
+</main>
+
+<footer>
+    <p>© 2025 L'Équipe NÉO - Concept de Redesign par Gemini. Images via Unsplash.</p>
+</footer>
+
+<script>
+  // --- 1. DYNAMIC TICKER SIMULATION ---
+  const scores = [
+    { sport: 'FOOT', match: 'PSG 2 - 1 OM', status: '88\'' },
+    { sport: 'TENNIS', match: 'Djokovic vs Sinner', status: '6-4, 4-3' },
+    { sport: 'NBA', match: 'Lakers 102 - 99 Warriors', status: 'Q4' },
+    { sport: 'F1', match: 'GP Monaco', status: 'Tour 45/78' },
+    { sport: 'RUGBY', match: 'La Rochelle 15 - 12 Leinster', status: 'MT' }
+  ];
+
+  const ticker = document.getElementById('ticker');
+
+  // Dupliquer le contenu pour un scroll infini fluide
+  function initTicker() {
+    // Créer une chaine longue
+    let contentHtml = '';
+    scores.forEach(s => {
+      contentHtml += `
+                    <div class="ticker-item">
+                        <span style="color:var(--brand-red); font-weight:900;">${s.sport}</span>
+                        <span>${s.match}</span>
+                        <span style="opacity:0.6; font-size:0.7em; border:1px solid #555; padding:1px 4px; border-radius:3px;">${s.status}</span>
+                    </div>
+                    <div class="ticker-item" style="opacity:0.2;">|</div>
+                `;
+    });
+
+    // Répéter 4 fois pour remplir l'écran large
+    ticker.innerHTML = contentHtml.repeat(10);
+  }
+
+  initTicker();
+
+  // --- 2. MICRO-INTERACTION: TILT EFFECT ON CARDS ---
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Effet de brillance qui suit la souris
+      card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.08), var(--bg-card))`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.background = 'var(--bg-card)';
+    });
+  });
+
+</script>
+</body>
+</html>
