@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctrine Project | The Future of PHP Persistence</title>
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-color: #050507;
+            --surface-color: #0e0e12;
+            --surface-border: #2a2a35;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent-primary: #8a2be2; /* Blue Violet */
+            --accent-glow: rgba(138, 43, 226, 0.4);
+            --success: #00ff9d;
+            
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+            
+            --max-width: 1200px;
+            --header-height: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-accent {
+            color: var(--accent-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--accent-glow);
+            filter: brightness(1.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--surface-border);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-secondary);
+        }
+
+        /* --- BACKGROUND FX --- */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+
+        .glow-spot {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 7, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--accent-primary); }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        nav a:hover { color: var(--text-primary); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-banner {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--surface-border);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--success);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- FEATURES / WHY DOCTRINE --- */
+        .section-header {
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .features {
+            padding: 5rem 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            padding: 2rem;
+            border-radius: 16px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(138, 43, 226, 0.05), transparent);
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .icon-box {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+        }
+
+        /* --- PROJECTS SECTION --- */
+        .projects-section {
+            padding: 5rem 0;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--surface-border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .project-title {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* --- CODE SNIPPET AREA --- */
+        .code-showcase {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            padding: 0 1rem;
+        }
+
+        .window {
+            background: #1e1e24;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            border: 1px solid var(--surface-border);
+        }
+
+        .window-header {
+            background: #2a2a35;
+            padding: 0.8rem 1rem;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #d6deeb;
+        }
+
+        .kwd { color: #c792ea; font-style: italic; } /* Keyword */
+        .cls { color: #ffcb6b; } /* Class */
+        .str { color: #c3e88d; } /* String */
+        .var { color: #82aaff; } /* Variable */
+        .com { color: #676e95; } /* Comment */
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 5rem;
+            padding: 4rem 0;
+            border-top: 1px solid var(--surface-border);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .sponsors {
+            margin-top: 2rem;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+        .sponsors:hover { filter: grayscale(0%); opacity: 1; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            nav ul { display: none; } /* Simple hiding for demo */
+            .hero-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <div class="glow-spot"></div>
+
+    <header>
+        <div class="container">
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-primary)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Doctrine
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#projects">Projets</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#community">Communauté</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#" style="color:var(--text-primary)">GitHub ↗</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <div class="stat-banner">
+                <span style="color:white">Total Downloads:</span> 
+                <span id="counter">6,886,307,564</span>
+            </div>
+            
+            <h1>L'Art de la<br><span class="text-gradient">Persistance PHP</span></h1>
+            
+            <p>
+                La suite d'outils la plus stable et puissante pour le mapping objet-relationnel et l'abstraction de base de données. Standard industriel depuis 2006.
+            </p>
+            
+            <div class="hero-actions">
+                <a href="#" class="btn btn-primary">Commencer maintenant</a>
+                <a href="#projects" class="btn btn-secondary">Explorer les projets</a>
+            </div>
+
+            <div class="code-showcase">
+                <div class="window">
+                    <div class="window-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="code-content">
+<span class="kwd">class</span> <span class="cls">Product</span>
+{
+    <span class="kwd">#[ORM\Id]</span>
+    <span class="kwd">#[ORM\Column]</span>
+    <span class="kwd">#[ORM\GeneratedValue]</span>
+    <span class="kwd">private</span> <span class="cls">int</span> <span class="var">$id</span> = <span class="kwd">null</span>;
+
+    <span class="kwd">#[ORM\Column]</span>
+    <span class="kwd">private</span> <span class="cls">string</span> <span class="var">$name</span>;
+
+    <span class="com">// La persistance des données devient triviale.</span>
+}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="features container">
+            <div class="section-header">
+                <h2>Pourquoi <span class="text-accent">Doctrine ?</span></h2>
+                <p style="color:var(--text-secondary)">La robustesse d'entreprise rencontre la flexibilité moderne.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="card">
+                    <div class="icon-box">⚡</div>
+                    <h3>Performance Native</h3>
+                    <p>Optimisé pour la vitesse avec un chargement paresseux (lazy loading) intelligent et un cache de métadonnées efficace.</p>
+                </div>
+                <div class="card">
+                    <div class="icon-box">🛡️</div>
+                    <h3>Stabilité Absolue</h3>
+                    <p>Une codebase éprouvée depuis plus d'une décennie, garantissant la pérennité de vos applications critiques.</p>
+                </div>
+                <div class="card">
+                    <div class="icon-box">🧩</div>
+                    <h3>Agnostique</h3>
+                    <p>Utilisez Doctrine avec Symfony, Laravel, Laminas ou en PHP pur. L'architecture est totalement découplée.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>L'Écosystème</h2>
+                    <p style="color:var(--text-secondary)">Une collection modulaire pour tous vos besoins de stockage.</p>
+                </div>
+
+                <div class="project-grid">
+                    <div class="project-card">
+                        <div>
+                            <div class="project-title">ORM</div>
+                            <p class="project-desc">Object Relational Mapper. Le cœur du système pour mapper vos objets PHP vers votre BDD relationnelle.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>v3.0 Stable</span>
+                            <span>→ Docs</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div>
+                            <div class="project-title">DBAL</div>
+                            <p class="project-desc">Database Abstraction Layer. Une couche puissante au-dessus de PDO pour l'interaction directe SQL.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>v4.0 Released</span>
+                            <span>→ Docs</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div>
+                            <div class="project-title">MongoDB ODM</div>
+                            <p class="project-desc">La puissance de l'ORM appliquée aux documents NoSQL MongoDB.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>Active</span>
+                            <span>→ Docs</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div>
+                            <div class="project-title">Migrations</div>
+                            <p class="project-desc">Gérez les changements de schéma de votre base de données de manière programmatique et sûre.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>Essential</span>
+                            <span>→ Docs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="community" class="container" style="padding: 5rem 0; text-align: center;">
+            <h3 style="margin-bottom: 2rem; color: var(--text-secondary); font-weight: normal;">Ils font confiance à Doctrine</h3>
+            <div style="display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap; opacity: 0.7; font-weight: bold; font-size: 1.5rem; letter-spacing: -1px;">
+                <span>Symfony</span>
+                <span>Laravel</span>
+                <span>Drupal</span>
+                <span>API Platform</span>
+                <span>Sylius</span>
+                <span>TYPO3</span>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Contribute</a>
+                <a href="#">Sponsorship</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p>&copy; 2006-2025 Doctrine Project Team. Open Source MIT License.</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.5;">Design Concept by Google Gemini</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animation simple du compteur au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            const counterEl = document.getElementById('counter');
+            const target = 6886307564;
+            // On affiche juste le chiffre formaté pour l'esthétique immédiate
+            // Dans une vraie app, on ferait un count-up
+            counterEl.innerText = new Intl.NumberFormat('en-US').format(target);
+
+            // Effet d'apparition au scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.card, .project-card').forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease-out';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
