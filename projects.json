@@ -126,6 +126,15 @@
         "original_url": "https://www.lequipe.fr/"
     },
     {
+        "id": "visiterouen",
+        "name": "Visite Rouen",
+        "description": "Site officiel de l&rsquo;Office de Tourisme de Rouen",
+        "icon": "⛪",
+        "author": "@GromNaN",
+        "gemini_url": "visiterouen.html",
+        "original_url": "https://www.visiterouen.fr/"
+    },
+    {
         "id": "itreco",
         "name": "It-reco",
         "description": "Site vitrine de la micro entreprise IT-RECO spécialisé dans le reconditionnement d'ordinateurs.",

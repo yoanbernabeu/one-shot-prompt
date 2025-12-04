@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rouen | Gothique Néon Refonte</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 style=%22filter: drop-shadow(0 0 5px %23FFC44D);%22>👑</text></svg>">
+    
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-deep: #121212;
+            --surface-primary: #1a1a1e;
+            --surface-secondary: #25252b;
+            --border-color: #33333a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent-gold: #FFC44D; /* Rich Amber/Gold */
+            --accent-glow: rgba(255, 196, 77, 0.4);
+            
+            --font-serif: 'Playfair Display', Georgia, serif; /* Editorial feel for titles */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            
+            --header-height: 80px;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: var(--text-primary); transition: color 0.3s; }
+        a:hover { color: var(--accent-gold); }
+        h1, h2, h3 { font-family: var(--font-serif); font-weight: 900; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        
+        .gold-text {
+            color: var(--accent-gold);
+            text-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--bg-deep);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--accent-glow);
+        }
+        
+        .btn-secondary {
+            background: none;
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 196, 77, 0.1);
+            color: white;
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        nav a {
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+        nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            background: url('https://picsum.photos/1600/1000?grayscale') center center no-repeat;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            
+            /* Overlay pour le "Gothique Néon" */
+            box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.9);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: brightness(0.8);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            line-height: 1;
+            margin-bottom: 1rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, white 20%, var(--accent-gold) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 196, 77, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* --- SECTION BASE STYLE --- */
+        section {
+            padding: 100px 0;
+            position: relative;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- L'HÉRITAGE (Grid Section) --- */
+        .heritage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .heritage-card {
+            background: var(--surface-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .heritage-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 15px 40px rgba(255, 196, 77, 0.15);
+        }
+
+        .card-image {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+            filter: brightness(0.8);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: var(--accent-gold);
+        }
+
+        .card-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* --- EXPERIENCE (Asymmetrical Layout) --- */
+        .experience-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 80px;
+            margin-bottom: 100px;
+        }
+        
+        .experience-item:nth-child(even) .exp-text {
+            order: 2;
+        }
+        .experience-item:nth-child(even) .exp-media {
+            order: 1;
+        }
+
+        .exp-media img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s;
+        }
+        
+        .exp-media:hover img {
+            transform: scale(1.02);
+        }
+
+        .exp-text h3 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+        .exp-text p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        /* --- PARALLAX BANNER (Audacious Feature) --- */
+        .parallax-banner {
+            height: 400px;
+            background: url('https://picsum.photos/1600/600?blur=5') fixed center center no-repeat;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+            margin: 80px 0;
+        }
+        .parallax-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+        .parallax-content {
+            position: relative;
+            z-index: 2;
+        }
+        .parallax-content h2 {
+            font-size: 3.5rem;
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px var(--accent-glow);
+            margin-bottom: 1rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 50px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        .footer-links a:hover {
+            color: var(--accent-gold);
+        }
+        
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .container { padding: 0 20px; }
+            .hero h1 { font-size: 3.5rem; }
+            .hero p { font-size: 1.2rem; }
+            
+            .heritage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .experience-item {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .experience-item:nth-child(even) .exp-text {
+                order: 1;
+            }
+            .experience-item:nth-child(even) .exp-media {
+                order: 2;
+            }
+            .exp-text h3 {
+                font-size: 2rem;
+            }
+            
+            .parallax-banner {
+                height: 300px;
+            }
+            .parallax-content h2 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            nav { display: none; } /* Simplification pour la démo mobile */
+            .hero h1 { font-size: 2.5rem; letter-spacing: 2px; }
+            .hero-actions { flex-direction: column; }
+            .btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="gold-text">ROUEN</span> | VILLE
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#heritage">Héritage</a></li>
+                    <li><a href="#experiences">Expériences</a></li>
+                    <li><a href="#agenda">Agenda</a></li>
+                    <li><a href="#">Réserver ↗</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1>Rouen | La ville aux <span class="gold-text">cent clochers</span></h1>
+                <p>
+                    Plus de deux mille ans d'histoire. Découvrez la Capitale de Normandie sous un angle audacieux, où le passé rencontre le futur.
+                </p>
+                <div class="hero-actions">
+                    <a href="#agenda" class="btn btn-primary">Voir l'Agenda 2025</a>
+                    <a href="#heritage" class="btn btn-secondary">Explorer le Patrimoine</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="heritage" class="container">
+            <div class="section-header">
+                <h2>L'Héritage <span class="gold-text">Éditorial</span></h2>
+                <p style="color:var(--text-secondary);">Quatre monuments qui définissent l'âme de Rouen, la ville martyre.</p>
+            </div>
+            
+            <div class="heritage-grid">
+                <a href="#" class="heritage-card">
+                    <img src="https://picsum.photos/400/250?random=1" alt="Cathédrale de Rouen" class="card-image">
+                    <div class="card-content">
+                        <h3>Cathédrale Notre-Dame</h3>
+                        <p>La splendeur du gothique flamboyant, le plus haut clocher de France et source d'inspiration pour Monet.</p>
+                    </div>
+                </a>
+
+                <a href="#" class="heritage-card">
+                    <img src="https://picsum.photos/400/250?random=2" alt="Gros Horloge" class="card-image">
+                    <div class="card-content">
+                        <h3>Le Gros Horloge</h3>
+                        <p>L'icône de la ville, une architecture de la Renaissance qui surplombe la rue piétonne historique.</p>
+                    </div>
+                </a>
+
+                <a href="#" class="heritage-card">
+                    <img src="https://picsum.photos/400/250?random=3" alt="Historial Jeanne d'Arc" class="card-image">
+                    <div class="card-content">
+                        <h3>Historial Jeanne d'Arc</h3>
+                        <p>Plongez au cœur de l'histoire et du procès de la Pucelle, dans l'archevêché rénové.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <div class="parallax-banner">
+            <div class="parallax-content">
+                <h2 style="color: var(--accent-gold);">"Osez la <span class="gold-text">Normandie Digitale</span>."</h2>
+                <a href="#" class="btn btn-primary" style="margin-top: 10px;">Réserver un Guide Privé</a>
+            </div>
+        </div>
+
+        <section id="experiences" class="container">
+            <div class="section-header">
+                <h2>Expériences <span class="gold-text">Modernes</span></h2>
+                <p style="color:var(--text-secondary);">Au-delà des pierres, goûtez, naviguez, vivez l'énergie de la métropole.</p>
+            </div>
+            
+            <div class="experience-item">
+                <div class="exp-text">
+                    <span class="gold-text" style="font-size: 0.9rem; text-transform: uppercase; font-weight: 700;">Expérience 01</span>
+                    <h3>La Nouvelle Gastronomie</h3>
+                    <p>
+                        Rouen est un pôle d'innovation culinaire. Des étoilés Michelin aux bistrots modernes, découvrez une cuisine qui réinterprète les classiques normands avec audace.
+                    </p>
+                    <a href="#" class="btn btn-secondary">Découvrir les Chefs</a>
+                </div>
+                <div class="exp-media">
+                    <img src="https://picsum.photos/600/400?random=4" alt="Gastronomie" style="object-position: center bottom;">
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="exp-text">
+                    <span class="gold-text" style="font-size: 0.9rem; text-transform: uppercase; font-weight: 700;">Expérience 02</span>
+                    <h3>Les Quais et la Seine</h3>
+                    <p>
+                        Le fleuve est l'épine dorsale de la ville. Louez un vélo, flânez sur les quais rénovés ou explorez la Forêt Monumentale, la nature aux portes de la métropole.
+                    </p>
+                    <a href="#" class="btn btn-secondary">Activités de Plein Air</a>
+                </div>
+                <div class="exp-media">
+                    <img src="https://picsum.photos/600/400?random=5" alt="Seine et nature">
+                </div>
+            </div>
+        </section>
+
+        <section id="agenda" class="container">
+            <div class="section-header">
+                <h2>Agenda <span class="gold-text">Immédiat</span></h2>
+                <p style="color:var(--text-secondary);">Ce qui se passe cette semaine à Rouen et dans la Métropole.</p>
+            </div>
+            
+            <div style="background: var(--surface-secondary); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <ul style="list-style: none;">
+                    <li style="padding: 15px 0; border-bottom: 1px dotted var(--border-color);">
+                        <span class="gold-text">15/12 | 19h30 :</span> Concert d'orgue à l'Abbatiale Saint-Ouen.
+                    </li>
+                    <li style="padding: 15px 0; border-bottom: 1px dotted var(--border-color);">
+                        <span class="gold-text">16/12 - 24/12 :</span> Marché de Noël sur la place de la Cathédrale (Dernière semaine).
+                    </li>
+                    <li style="padding: 15px 0;">
+                        <span class="gold-text">18/12 | 18h00 :</span> Vernissage Exposition 'Maxime Old, homme d'intérieurs' (Musée des Beaux-Arts).
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-secondary" style="margin-top: 30px;">Voir l'agenda complet</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Espace Pro</a>
+                <a href="#">Contact & Accès</a>
+                <a href="#">Politique de Confidentialité</a>
+                <a href="#">Rouen Pass</a>
+            </div>
+            <p>&copy; 2025 Office de Tourisme Rouen. Design concept "Gothique Néon".</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            
+            // Effet d'opacité/réduction de la hauteur au scroll (Ajoute une dynamique)
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.style.height = '60px';
+                    header.style.borderBottomColor = 'var(--accent-gold)';
+                } else {
+                    header.style.height = '80px';
+                    header.style.borderBottomColor = 'rgba(255, 255, 255, 0.05)';
+                }
+            });
+            
+            // Effet d'apparition au scroll pour les expériences
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.experience-item').forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(50px)';
+                el.style.transition = 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; /* Custom timing function */
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
